@@ -6,7 +6,9 @@ import java.net.Socket;
 public class Server {
 	//public static List<Socket> socketList = new ArrayList<>();
 	public static final int SERVER_PORT = 8888;
+	//连接池
 	public static CrazyiMap<String,PrintStream> clients = new CrazyiMap<>();
+	public static int MaxPoolNum = 1000;
 	public void init(){
 		//try括号里面的变量将自动关闭，无须serverSocket.close()
 		try(ServerSocket serverSocket = new ServerSocket(SERVER_PORT)){

@@ -25,21 +25,37 @@ public class ServerThread implements Runnable{
 						System.out.println("该用户名已存在");
 						ps.println(CrazyitProtocol.NAME_REP);
 					}else{
-						System.out.println(userName+"登录成功！");
-						ps.println(CrazyitProtocol.LOGIN_SUCCESS);
-						Server.clients.put(userName, ps);
+						if(Server.clients.size()<Server.MaxPoolNum){
+							System.out.println(userName+"登录成功！"+" 共登录"+(Server.clients.size()+1)+"人");
+							ps.println(CrazyitProtocol.LOGIN_SUCCESS);
+							Server.clients.put(userName, ps);
+						}else{
+							System.out.println("超出最大人数！");
+							ps.println(CrazyitProtocol.MAXPOOL);
+						}
+						
 					}
 				}else if(line.startsWith(CrazyitProtocol.PRIVATE_ROUND)&&line.endsWith(CrazyitProtocol.PRIVATE_ROUND)){
 					//私聊信息
 					String userAndMsg = getRealMsg(line);
-					String user = userAndMsg.split(CrazyitProtocol.SPLIT_SIGN)[0];
-					String msg = userAndMsg.split(CrazyitProtocol.SPLIT_SIGN)[1];
-					Server.clients.map.get(user).println(Server.clients.getKeyByValue(ps)+"悄悄对你说： "+msg);
+					String num = userAndMsg.split(CrazyitProtocol.SPLIT_SIGN)[0];
+					String user = userAndMsg.split(CrazyitProtocol.SPLIT_SIGN)[1];
+					String msg = userAndMsg.split(CrazyitProtocol.SPLIT_SIGN)[2];
+					if(Server.clients.map.containsKey(user)){
+						ps.println(CrazyitProtocol.SEND_ROUND+num+CrazyitProtocol.SEND_ROUND);
+						Server.clients.map.get(user).println(Server.clients.getKeyByValue(ps)+"悄悄对你说： "+msg);
+					}else{
+						ps.println(user+"用户不存在！");
+					}
+					
 				}else{
 					//公聊信息
 					String msg = getRealMsg(line);
+					String num = msg.split(CrazyitProtocol.SPLIT_SIGN)[0];
+					String message = msg.split(CrazyitProtocol.SPLIT_SIGN)[1];
+					ps.println(CrazyitProtocol.SEND_ROUND+num+CrazyitProtocol.SEND_ROUND);
 					for(PrintStream psClient : Server.clients.valueSet()){
-						psClient.println("【公共】"+Server.clients.getKeyByValue(ps)+"说： "+getRealMsg(line));
+						psClient.println("【公共】"+Server.clients.getKeyByValue(ps)+"说： "+message);
 					}
 				}
 				/*System.out.println("receive message!");

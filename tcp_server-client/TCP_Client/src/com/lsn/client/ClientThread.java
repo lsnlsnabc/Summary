@@ -12,10 +12,18 @@ public class ClientThread implements Runnable{
 		try{
 			String content = null;
 			while((content=br.readLine())!=null){
-				System.out.println(content);
+				if(content.startsWith(CrazyitProtocol.SEND_ROUND)&&content.endsWith(CrazyitProtocol.SEND_ROUND)){
+					content = getRealMsg(content);
+					System.out.println(Client.list.get(Integer.parseInt(content))+" success!");
+					Client.list.remove(Integer.parseInt(content));
+				}else{
+					System.out.println(content);
+				}
 			}
 		}catch(Exception ex){
-			ex.printStackTrace();
+			System.out.println("服务器已断开！");
+			System.exit(1);
+			//ex.printStackTrace();
 		}finally{
 			try{
 				if(br!=null){

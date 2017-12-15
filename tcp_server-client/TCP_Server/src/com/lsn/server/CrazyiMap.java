@@ -3,6 +3,10 @@ import java.util.*;
 public class CrazyiMap<K,V> {
 	//创建一个线程安全的HashMap
 	public Map<K,V> map = Collections.synchronizedMap(new HashMap<K,V>());
+	//查看大小
+	public synchronized int size(){
+		return map.size();
+	}
 	//根据value删除指定项
 	public synchronized void removeByValue(Object value){
 		for(Object key : map.keySet()){
