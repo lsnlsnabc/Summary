@@ -1,0 +1,11 @@
+读 Matlab help 里面有全解，视频也是根据这个来的
+https://www.mathworks.com/help/releases/R2017a/matlab/matlab_external/call-modified-python-module.html#zmw57dd0e61081
+调用不了是由于路径未添加成功
+1. clear classes 清空变量
+2. 在搜索栏找到py的位置
+3. py.importlib.import_module('mymod') 将py文件加入路径
+4. py.mymod.search() 可以调用函数
+
+注意：numpy可能没有，可能要添加路径
+另外 py.reload(mod);可卸载某路径 python2.7
+     py.importlib.reload(mod);   python3.4 python3.5
